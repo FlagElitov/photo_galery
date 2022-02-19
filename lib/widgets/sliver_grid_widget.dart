@@ -16,11 +16,9 @@ class SliverGridWidget extends StatelessWidget {
         crossAxisSpacing: 3,
       ),
       delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          return ChachedImage(
-            photo: photo[index],
-          );
-        },
+        (BuildContext context, int index) => ChachedImage(
+          photo: photo[index],
+        ),
         childCount: photo.length,
       ),
     );

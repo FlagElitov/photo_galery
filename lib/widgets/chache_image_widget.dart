@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:photo_galery/widgets/mock_widget.dart';
 
 class ChachedImageWidget extends StatelessWidget {
   final String url;
@@ -30,18 +31,19 @@ class ChachedImageWidget extends StatelessWidget {
             image: DecorationImage(
               image: imageProvider,
               fit: boxFit,
-              colorFilter: const ColorFilter.mode(
-                Colors.red,
-                BlendMode.colorBurn,
-              ),
             ),
           ),
         ),
-        placeholder: (context, url) => const SizedBox(
-          height: 20,
-          width: 20,
-          child: CircularProgressIndicator(),
+        placeholder: (context, url) => const Center(
+          child: SizedBox(
+            width: 30,
+            height: 30,
+            child: CircularProgressIndicator(),
+          ),
         ),
-        errorWidget: (context, url, error)=> errorWidget(),
+        errorWidget: (context, url, error) {
+          () => errorWidget();
+          return const MockWidget();
+        },
       );
 }

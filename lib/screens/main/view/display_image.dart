@@ -16,23 +16,22 @@ class _ChachedImageState extends State<ChachedImage> {
     Navigator.pushNamed(context, "/detail", arguments: photo);
   }
 
-  Icon _errorWidget() {
-    setState(() {
-      isDisable = true;
-    });
-    return const Icon(Icons.error);
+  Future errorWidget() async {
+    setState(() => isDisable = true);
   }
 
   @override
-  Widget build(BuildContext context) => InkWell(
-        onTap: () {
-          if (isDisable) return;
-          _handleItemState(context, widget.photo);
-        },
-        child: ChachedImageWidget(
-          url: widget.photo.url,
-          errorWidget: _errorWidget,
-          boxFit: BoxFit.cover,
-        ),
-      );
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        if (isDisable) return;
+        _handleItemState(context, widget.photo);
+      },
+      child: ChachedImageWidget(
+        url: widget.photo.url,
+        errorWidget: errorWidget,
+        boxFit: BoxFit.cover,
+      ),
+    );
+  }
 }
