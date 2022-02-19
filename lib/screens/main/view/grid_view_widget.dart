@@ -1,64 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:photo_galery/models/photo.dart';
-import 'package:photo_galery/utils/generate_photo.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:photo_galery/screens/main/bloc/main_screen_bloc.dart';
 import 'package:photo_galery/widgets/sliver_grid_widget.dart';
 import 'package:photo_galery/widgets/sliver_list_widget.dart';
 
 class GridViewWidget extends StatefulWidget {
   const GridViewWidget({Key? key}) : super(key: key);
-
   @override
   State<GridViewWidget> createState() => _GridViewWidgetState();
 }
 
 class _GridViewWidgetState extends State<GridViewWidget> {
-  List<Photo> photo = generatePhoto();
-  final ScrollController _scrollController = ScrollController();
-  int limit = 100;
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
-  set isLoading(status) => _isLoading = status;
-  bool get isLimitLength => photo.length >= limit;
-
-  Future _addController(ScrollController scrollController) async {
-    if (scrollController.position.pixels ==
-            scrollController.position.maxScrollExtent &&
-        !isLimitLength) {
-      setState(() {
-        isLoading = true;
-      });
-      await Future.delayed(const Duration(seconds: 2));
-      setState(() {
-        photo.addAll(generatePhoto().toList());
-        isLoading = false;
-      });
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(() {
-      if (!isLoading) _addController(_scrollController);
+    MainScreenBloc bloc = BlocProvider.of<MainScreenBloc>(context);
+    bloc.scrollController.addListener(() {
+      if (!bloc.isLoading) _listenController(bloc.scrollController, bloc);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    MainScreenBloc bloc = BlocProvider.of<MainScreenBloc>(context);
     Size size = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       height: size.height,
       width: size.width,
       child: CustomScrollView(
-        controller: _scrollController,
-        slivers: <Widget>[
-          SliverGridWidget(photo: photo),
-          SliverListWidget(
-            isLimitLength: isLimitLength,
-            isLoading: isLoading,
-            textEnd: "End of story :(",
-          )
+        controller: bloc.scrollController,
+        slivers: const <Widget>[
+          SliverGridWidget(),
+          SliverListWidget(textEnd: "End of story :(")
         ],
       ),
     );
@@ -66,7 +40,17 @@ class _GridViewWidgetState extends State<GridViewWidget> {
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    MainScreenBloc bloc = BlocProvider.of<MainScreenBloc>(context);
+    bloc.scrollController.dispose();
     super.dispose();
+  }
+}
+
+Future _listenController(
+    ScrollController scrollController, MainScreenBloc bloc) async {
+  if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent &&
+      !bloc.isLimitLength) {
+    bloc.add(GenerateNewPhotoEvent());
   }
 }
