@@ -6,7 +6,7 @@ List<Photo> generatePhoto() {
     10,
     (counter) {
       int random(min, max) => min + Random().nextInt(max - min);
-      return Photo("https://picsum.photos/id/${random(1, 350)}/800/1120.jpg");
+      return Photo("https://picsum.photos/id/${random(1, 550)}/800/1200.jpg");
     },
   );
 }

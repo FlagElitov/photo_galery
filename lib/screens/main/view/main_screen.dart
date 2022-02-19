@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:photo_galery/screens/main/bloc/main_screen_bloc.dart';
 import 'package:photo_galery/screens/main/view/grid_view_widget.dart';
 
 class MainScreen extends StatelessWidget {
@@ -11,7 +13,10 @@ class MainScreen extends StatelessWidget {
         centerTitle: true,
         title: const Text("Photo Galery"),
       ),
-      body: const GridViewWidget(),
+      body: BlocProvider(
+        create: (context) => MainScreenBloc(),
+        child: const GridViewWidget(),
+      ),
     );
   }
 }
