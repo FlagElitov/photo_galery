@@ -22,9 +22,12 @@ class DetailScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ChachedImageWidget(
-          url: photo.url,
-          boxFit: BoxFit.fill,
+        child: Hero(
+          tag: photo.url,
+          child: ChachedImageWidget(
+            url: photo.url,
+            boxFit: BoxFit.fill,
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

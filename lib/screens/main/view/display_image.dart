@@ -18,9 +18,12 @@ class ChachedImage extends StatelessWidget {
         if (isDisable) return;
         _handleItemState(context, photo);
       },
-      child: ChachedImageWidget(
-        url: photo.url,
-        boxFit: BoxFit.cover,
+      child: Hero(
+        tag: photo.url,
+        child: ChachedImageWidget(
+          url: photo.url,
+          boxFit: BoxFit.cover,
+        ),
       ),
     );
   }
